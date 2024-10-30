@@ -52,6 +52,7 @@ Route::post('/gg-android/login', function (Request $request) {
     $provider_user = Socialite::buildProvider(GoogleProvider::class, [
         'client_id' => '',
         'client_secret' => config('services.google.client_id'),
+        'redirect' => config('services.google.redirect'),
     ])->userFromToken($request->auth_token);
 
     return getUser($provider_user);
@@ -64,6 +65,7 @@ Route::post('/gg-ios/login', function (Request $request) {
     $provider_user = Socialite::buildProvider(GoogleProvider::class, [
         'client_id' => '',
         'client_secret' => config('services.google.client_secret'),
+        'redirect' => config('services.google.redirect'),
     ])->userFromToken($request->auth_token);
 
     return getUser($provider_user);
