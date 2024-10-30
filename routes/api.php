@@ -22,8 +22,6 @@ function getUser($provider_user, $auth_provider): \Illuminate\Http\JsonResponse
         $user = User::create([
             'name' => $provider_user->name,
             'email' => $provider_user->email,
-            'provider_name' => $auth_provider,
-            'provider_id' => $provider_user->id,
         ]);
     }
 
