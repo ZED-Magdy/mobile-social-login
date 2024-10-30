@@ -10,12 +10,13 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/{auth_provider}/login', function ($auth_provider, Request $request) {
-    $request->validate([
-       'auth_token' => 'required',
-    ]);
-    $provider_user = Socialite::driver($auth_provider)->userFromToken($request->auth_token);
-
+/**
+ * @param $provider_user
+ * @param $auth_provider
+ * @return \Illuminate\Http\JsonResponse
+ */
+function getUser($provider_user, $auth_provider): \Illuminate\Http\JsonResponse
+{
     $user = User::where('email', $provider_user->email)->first();
     if ($user == null) {
         $user = User::create([
@@ -32,4 +33,38 @@ Route::post('/{auth_provider}/login', function ($auth_provider, Request $request
         'user' => $user,
         'token' => $token,
     ]);
+}
+
+Route::post('/facebook/login', function (Request $request) {
+    $request->validate([
+       'auth_token' => 'required',
+    ]);
+    $provider_user = Socialite::driver('facebook')->userFromToken($request->auth_token);
+
+    return getUser($provider_user, 'facebook');
+});
+
+
+Route::post('/gg-android/register', function ($auth_provider, Request $request) {
+    $request->validate([
+        'auth_token' => 'required',
+    ]);
+    $provider_user = Socialite::buildProvider('google', [
+        'client_id' => '',
+        'client_secret' => config('services.google.client_id'),
+    ])->userFromToken($request->auth_token);
+
+    return getUser($provider_user, $auth_provider);
+});
+
+Route::post('/gg-ios/register', function ($auth_provider, Request $request) {
+    $request->validate([
+        'auth_token' => 'required',
+    ]);
+    $provider_user = Socialite::buildProvider('google', [
+        'client_id' => '',
+        'client_secret' => config('services.google.client_secret'),
+    ])->userFromToken($request->auth_token);
+
+    return getUser($provider_user, $auth_provider);
 });
