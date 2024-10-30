@@ -44,7 +44,7 @@ Route::post('/facebook/login', function (Request $request) {
 });
 
 
-Route::post('/gg-android/register', function (Request $request) {
+Route::post('/gg-android/login', function (Request $request) {
     $request->validate([
         'auth_token' => 'required',
     ]);
@@ -56,7 +56,7 @@ Route::post('/gg-android/register', function (Request $request) {
     return getUser($provider_user);
 });
 
-Route::post('/gg-ios/register', function (Request $request) {
+Route::post('/gg-ios/login', function (Request $request) {
     $request->validate([
         'auth_token' => 'required',
     ]);
