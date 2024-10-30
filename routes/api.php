@@ -5,6 +5,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\GoogleProvider;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -48,7 +49,7 @@ Route::post('/gg-android/login', function (Request $request) {
     $request->validate([
         'auth_token' => 'required',
     ]);
-    $provider_user = Socialite::buildProvider('google', [
+    $provider_user = Socialite::buildProvider(GoogleProvider::class, [
         'client_id' => '',
         'client_secret' => config('services.google.client_id'),
     ])->userFromToken($request->auth_token);
@@ -60,7 +61,7 @@ Route::post('/gg-ios/login', function (Request $request) {
     $request->validate([
         'auth_token' => 'required',
     ]);
-    $provider_user = Socialite::buildProvider('google', [
+    $provider_user = Socialite::buildProvider(GoogleProvider::class, [
         'client_id' => '',
         'client_secret' => config('services.google.client_secret'),
     ])->userFromToken($request->auth_token);
