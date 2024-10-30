@@ -21,7 +21,7 @@ function getUser($provider_user): JsonResponse
     if ($user == null) {
         $user = User::create([
             'name' => $provider_user->name,
-            'email' => $provider_user->email,
+            'email' => $provider_user->email ?? $provider_user->name.'@facebook.com',
         ]);
     }
 
