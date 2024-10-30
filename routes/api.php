@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/oauth/{auth_provider}/login', function ($auth_provider, Request $request) {
+Route::post('/{auth_provider}/login', function ($auth_provider, Request $request) {
     $request->validate([
        'auth_token' => 'required',
     ]);
