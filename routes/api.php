@@ -22,6 +22,7 @@ function getUser($provider_user): JsonResponse
         $user = User::create([
             'name' => $provider_user->name,
             'email' => $provider_user->email ?? $provider_user->name.'@facebook.com',
+            'password' => bcrypt('123456'),
         ]);
     }
 
