@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
@@ -12,10 +13,9 @@ Route::get('/user', function (Request $request) {
 
 /**
  * @param $provider_user
- * @param $auth_provider
- * @return \Illuminate\Http\JsonResponse
+ * @return JsonResponse
  */
-function getUser($provider_user, $auth_provider): \Illuminate\Http\JsonResponse
+function getUser($provider_user): JsonResponse
 {
     $user = User::where('email', $provider_user->email)->first();
     if ($user == null) {
@@ -39,11 +39,11 @@ Route::post('/facebook/login', function (Request $request) {
     ]);
     $provider_user = Socialite::driver('facebook')->userFromToken($request->auth_token);
 
-    return getUser($provider_user, 'facebook');
+    return getUser($provider_user);
 });
 
 
-Route::post('/gg-android/register', function ($auth_provider, Request $request) {
+Route::post('/gg-android/register', function (Request $request) {
     $request->validate([
         'auth_token' => 'required',
     ]);
@@ -52,10 +52,10 @@ Route::post('/gg-android/register', function ($auth_provider, Request $request) 
         'client_secret' => config('services.google.client_id'),
     ])->userFromToken($request->auth_token);
 
-    return getUser($provider_user, $auth_provider);
+    return getUser($provider_user);
 });
 
-Route::post('/gg-ios/register', function ($auth_provider, Request $request) {
+Route::post('/gg-ios/register', function (Request $request) {
     $request->validate([
         'auth_token' => 'required',
     ]);
@@ -64,5 +64,5 @@ Route::post('/gg-ios/register', function ($auth_provider, Request $request) {
         'client_secret' => config('services.google.client_secret'),
     ])->userFromToken($request->auth_token);
 
-    return getUser($provider_user, $auth_provider);
+    return getUser($provider_user);
 });
